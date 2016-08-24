@@ -120,7 +120,10 @@ $ curl -s "search.mapzen.com/v1/reverse?size=1&point.lat=40.74358294846026&point
 
 ### How can I install my own instance of Pelias?
 
-Check out our [vagrant development environment](https://github.com/pelias/vagrant).
+For a quick preview of what pelias is like, check out our [Vagrant development environment](https://github.com/pelias/vagrant).
+Note that the Vagrant environment hasn't gotten a lot of updates lately, and it may not be working perfectly.
+
+To do a _real_ installation of Pelias for production use or serious development, check out our [full installation docs](https://github.com/pelias/pelias-doc/blob/master/installing.md).
 
 ### How does it work?
 
