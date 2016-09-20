@@ -6,10 +6,13 @@
     <title>Pelias</title>
 
     <link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
-    <link href='//api.tiles.mapbox.com/mapbox.js/v1.6.0-beta0/mapbox.css' rel='stylesheet' />
+    
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.js"></script>
-    <script src='//api.tiles.mapbox.com/mapbox.js/v1.6.0-beta0/mapbox.js'></script>
+    <!-- <script src='//api.tiles.mapbox.com/mapbox.js/v1.6.0-beta0/mapbox.js'></script>
+	  <link href='//api.tiles.mapbox.com/mapbox.js/v1.6.0-beta0/mapbox.css' rel='stylesheet' />-->
+	<script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.js'></script>
+	<link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.css' rel='stylesheet' />
     <script src="javascript/application.js"></script>
 
     <style>
@@ -21,17 +24,46 @@
       .results { margin-top: 100px; margin-left: 60px; background: rgba(255, 255, 255, 0.7); z-index: 100; }
       .small:hover { cursor: pointer; color: #000; }
       .small:hover strong { text-decoration: underline; }
-      .centerLabel { position: absolute; top: 50%; left: 50%; }
-      .centerLabel div { position: absolute;
+      ._centerLabel { position: absolute; top: 50%; left: 50%; }
+      ._centerLabel div { position: absolute;
         left: -150px; background: rgba(0, 0, 0, 0.5); color: #fff; width: 300px; text-align: center;
         height: 50px; top: -25px; line-height: 50px;
       }
+       /*raf*/
+       
+        .navbar-brand { padding-top: 5px }
+        .navbar-default {background-color: rgba(255,255,255,0.8); border-color: #e7e7e7;}
+        .site-name {padding-left:1em;font-size: 1.5em; _margin-left:20px;}
+        #top {top: 45px;}
+        .centerLabel {position: absolute;top: 50%;left: 50%;text-align: center;}
+        .pointer {background: url("pointer.png");position: absolute;width: 60px;height: 60px;top: -30px;left: -30px;opacity: 0.5;}
+        .centerLabel .label {font-weight: lighter;position: absolute;background: rgba(0,0,0,0.5);color: #fff;text-align: center;
+			      font-size: 15px;padding: 10px 0;top: 50px;width: 250px;left: -125px;}
+      
     </style>
 
   </head>
 
   <body ng-app="play">
-
+  <!--raf -->
+  <div id="navnavnav" role="navigation">
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+		  <a class="navbar-brand" href="/"><img src="logo_5t.png" alt="5T"><span class="site-name">Geococker</span></a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav navbar-right">
+		    <li class=""><a href="http://www.5t.torino.it">Sito 5T</a></li>
+		    <li class=""><a href="http://bunet.torino.it">Bunet</a></li>
+		    <li><a href="http://www.muoversinpiemonte.it" target="_blank">Muoversinpiemonte</a></li>
+		  </ul>
+		</div>
+	</div>
+  </nav>
+</div>
+<!--raf fine-->
     <div map-demo id="map" center="center"></div>
 
     <div class="container-fluid" ng-controller="SearchCtrl">
@@ -39,40 +71,51 @@
       <div id="top">
         <div class="row">
           <div class="col-md-3">
-            <input class="form-control input-lg" placeholder="Type something..." ng-model="input" focus/>
+            <input class="form-control input-lg" placeholder="cerca..." ng-model="input" focus/>
           </div>
         </div>
       </div>
 
       <div class="row" ng-show="input">
-        <div class="col-md-6 results">
+        <div class="col-md-9 results">
           <div class="row">
 
-            <div class="col-md-6">
-              <div class="lead">Search</div>
+            <div class="col-md-4">
+              <div class="lead">Ricerca</div>
               <div ng-repeat="result in searchResults" class="small" ng-click="goTo(result)">
                 <strong>{{ result.properties.name }} ({{result.properties.type}})</strong><br/>
                 <div ng-repeat="field in fieldsFor(result)">{{ field }}: {{ result.properties[field + '_name'] }}</div>
               </div>
-              <p ng-if="!searchResults.length"><em>Nothing to see here</em></p>
+              <p ng-if="!searchResults.length"><em>Nessun risultato</em></p>
             </div>
 
-            <div class="col-md-6">
-              <div class="lead">Suggest</div>
+            <div class="col-md-4">
+              <div class="lead">Suggerimenti</div>
               <div ng-repeat="result in suggestResults" class="small" ng-click="goTo(result)">
                 <strong>{{ result.properties.name }} ({{result.properties.type}})</strong><br/>
                 <em>{{ result.properties.hint }}</em><br/>
                 <div ng-repeat="field in fieldsFor(result)">{{ field }}: {{ result.properties[field + '_name'] }}</div>
               </div>
-              <p ng-if="!suggestResults.length"><em>Nothing to see here</em></p>
+              <p ng-if="!suggestResults.length"><em>Nessun risultato</em></p>
+            </div>
+
+	   <div class="col-md-4">
+              <div class="lead">Google</div>
+              <div ng-repeat="result in googleResults" class="small" ng-click="goTo(result)">
+                <strong>{{ result.properties.name }} ({{result.properties.type}})</strong><br/>
+                <em>{{ result.properties.hint }}</em><br/>
+                <div ng-repeat="field in fieldsFor(result)">{{ field }}: {{ result.properties[field + '_name'] }}</div>
+              </div>
+              <p ng-if="!googleResults.length"><em>Nessun risultato</em></p>
             </div>
 
           </div>
         </div>
       </div>
 
-      <div class="centerLabel" ng-show="spec.reverseResults.length">
-        <div>
+      <div class="centerLabel" >
+	<div class="pointer"></div>
+        <div class="label" ng-show="spec.reverseResults.length">
           {{ spec.reverseResults[0].properties.name }}
         </div>
       </div>

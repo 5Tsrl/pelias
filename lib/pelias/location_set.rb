@@ -24,6 +24,11 @@ module Pelias
           entry['suggest'][:input].compact!
           entry['suggest'][:input].uniq!
         end
+		#raf 
+		#if entry['name'] == 'Via Vela' || entry['name'] == 'Corso Duca degli Abruzzi' || entry['name'] == 'Moncalieri'|| entry['name'] == 'Collegno'
+		#	puts entry['suggest']
+		#end
+		
         denied = %w{boundaries suggest refs}
         entry['suggest']['payload'] = entry.reject { |k, v| denied.include?(k) }
       end
@@ -64,7 +69,11 @@ module Pelias
             entry['refs'][type] = record['_id']
             entry["#{type}_name"] = source['name']
             entry["#{type}_abbr"] = source['abbr']
-            entry["#{type}_alternate_names"] = source['alternate_names']
+            #raf entry["#{type}_alternate_names"] = source['alternate_names']
+			#raf
+			#if type.to_s == 'admin1'
+			  entry["#{type}_population"] = source['population']
+			#end
           rescue
             Pelias::QuattroIndexer.new.perform type, result[:gid]
             Pelias::ES_CLIENT.indices.refresh(index: Pelias::INDEX)

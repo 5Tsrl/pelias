@@ -4,8 +4,9 @@ module Pelias
 
     extend self
 
-    FIELD_NAMES = ['name^3', 'admin1_abbr', 'admin0_abbr', 'features'].
-      concat(QuattroIndexer::SHAPE_ORDER.flat_map { |f| ["#{f}_name", "#{f}_alternate_names"] })
+    #FIELD_NAMES = ['name^3', 'admin1_abbr', 'admin0_abbr', 'features'].										#raf Individual fields can be boosted with the caret (^) notation
+	FIELD_NAMES = ['name^3', 'local_admin_name', 'features'].										#raf bunet in provincia (todo boost  short_name)
+      concat(QuattroIndexer::SHAPE_ORDER.flat_map { |f| ["#{f}_name", "#{f}_alternate_names"] })	#toglierei....
 
     def search(term, viewbox = nil, center = nil, size = 10)
       term.downcase!
@@ -13,7 +14,7 @@ module Pelias
         query: {
           query_string: {
             query: term,
-            fields: FIELD_NAMES,
+            fields: FIELD_NAMES,					#raf multimatch query 
             default_operator: 'AND'
           }
         }

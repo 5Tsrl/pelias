@@ -17,7 +17,8 @@ namespace :synonyms do
     File.open('config/synonyms.txt', 'w') do |file|
 
       # write each of the postal synonym lines
-      File.read('config/data/en_postal_synonyms.txt').each_line do |line|
+      #raf File.read('config/data/en_postal_synonyms.txt').each_line do |line|
+	  File.read('config/data/it_synonyms.txt').each_line do |line|
         file.puts line.split(',').map { |f| f.downcase.strip }.uniq.join(',')
       end
 
@@ -32,14 +33,14 @@ namespace :synonyms do
       file.puts 'southeast,se'
 
       # and then generate for each number
-      (0..1000).each do |num|
-        file.puts [
-          num,
-          (num.to_words(remove_hyphen: true) if num < 100),
-          (num.to_words(remove_hyphen: true, ordinal: true) if num < 100),
-          "#{num}#{suffix_for(num)}"
-        ].compact.join(',')
-      end
+ #     (0..1000).each do |num|
+ #       file.puts [
+ #         num,
+ #         (num.to_words(remove_hyphen: true) if num < 100),
+ #         (num.to_words(remove_hyphen: true, ordinal: true) if num < 100),
+ #         "#{num}#{suffix_for(num)}"
+ #       ].compact.join(',')
+ #     end
 
     end
 

@@ -1,0 +1,14 @@
+via,v\.
+corso,c\.so,cso
+viale,v\.le
+piazza,p\.zza,pza
+frazione,fraz,fraz\.
+borgata,borg\.
+strada,str\.
+primo,I,1,1°
+secondo,II,2,2°
+terzo,III,3,3,°
+quattro,IV,4,5°
+quinto,V,5,5°
+sesto,VI,6,6°
+venticinque,XXV,25

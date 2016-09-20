@@ -1,0 +1,8 @@
+#host: 127.0.0.1
+#port: 6379
+#database: 12
+#namespace: sidekiq
+
+#raf
+#:url=>"redis://127.0.0.1:6379/12", :namespace=>"sidekiq"
+:url: "redis://127.0.0.1:6379/12"

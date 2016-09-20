@@ -6,7 +6,8 @@ gem 'pg'
 gem 'rack-test'
 gem 'rake'
 gem 'sequel'
-gem 'sidekiq'
+gem 'sidekiq', '~> 2.17.6'
+#gem 'sidekiq'
 gem 'sidekiq-failures'
 gem 'sinatra'
 gem 'tilt-jbuilder'
@@ -16,7 +17,7 @@ gem 'yajl-ruby'
 gem 'numbers_and_words'
 
 group :test, :development do
-  gem 'debugger'
+#  gem 'debugger'
   gem 'guard-rspec', require: false
 end
 

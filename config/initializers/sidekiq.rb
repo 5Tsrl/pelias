@@ -7,7 +7,8 @@ configuration = {
   url: "redis://#{redis_config['host']}:#{redis_config['port']}/#{redis_config['database']}",
   namespace: redis_config['namespace']
 }
-
+#puts "passato da initializer sidekiq"
+#puts configuration
 # And use it
 Sidekiq.configure_server { |c| c.redis = configuration }
 Sidekiq.configure_client { |c| c.redis = configuration }

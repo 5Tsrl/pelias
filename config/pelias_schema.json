@@ -172,7 +172,7 @@
           "type": "completion",
           "preserve_position_increments": false,
           "preserve_separators": false,
-          "index_analyzer": "suggest_synonyms",
+		  "index_analyzer": "standard",
           "search_analyzer": "standard",
           "payloads": true
         },

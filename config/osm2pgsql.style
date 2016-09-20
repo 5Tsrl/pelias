@@ -57,6 +57,8 @@ node,way   man_made     text         polygon
 node,way   military     text         polygon
 node,way   motorcar     text         linear
 node,way   name         text         linear
+node,way   short_name   text         linear
+node,way   alt_name     text         linear
 node,way   natural      text         polygon  # natural=coastline tags are discarded by a hard coded rule in osm2pgsql
 node,way   office       text         polygon
 node,way   oneway       text         linear
@@ -80,6 +82,7 @@ node,way   toll         text         linear
 node,way   tourism      text         polygon
 node,way   tower:type   text         linear
 way        tracktype    text         linear
+node,way   traffic_sign text		 polygon
 node,way   tunnel       text         linear
 node,way   water        text         polygon
 node,way   waterway     text         polygon

@@ -4,16 +4,17 @@ module Pelias
     include Sidekiq::Worker
 
     PATHS = {
-      admin0: 'qs_adm0',
+      #admin0: 'qs_adm0',
       admin1: 'qs_adm1',
-      admin2: 'qs_adm2',
+      #admin2: 'qs_adm2',
       local_admin: 'qs_localadmin',
-      locality: 'gn-qs_localities',
-      neighborhood: 'qs_neighborhoods'
+      #locality: 'gn-qs_localities',
+      #neighborhood: 'qs_neighborhoods'
     }
 
     ABBR_FIELDS = {
-      admin0: :qs_iso_cc
+      admin0: :qs_iso_cc,
+      admin1: :qs_a1_alt   #raf
     }
 
     NAME_FIELDS = {
@@ -25,7 +26,8 @@ module Pelias
       neighborhood: :name
     }
 
-    SHAPE_ORDER = [:admin0, :admin1, :admin2, :local_admin, :locality, :neighborhood, :street, :address, :poi]
+    #SHAPE_ORDER = [:admin0, :admin1, :admin2, :local_admin, :locality, :neighborhood, :street, :address, :poi]
+	SHAPE_ORDER = [ :admin1,  :local_admin, :street, :address, :poi]
 
     def perform(type, gid)
 
@@ -38,16 +40,21 @@ module Pelias
       fields << NAME_FIELDS[type_sym]
       fields << ABBR_FIELDS[type_sym] if ABBR_FIELDS.key?(type_sym)
       fields << :qs_iso_cc if type_sym == :admin1
+#raf
+      fields << :qs_pop if type_sym == :local_admin
       record = DB[:"qs_#{type}"].select(*fields).where(gid: gid).first
 
       # grab our ids
       gn_id = sti record[:qs_gn_id]
       woe_id = sti record[:qs_woe_id]
+#raf aggiungo pop (non serve più, presa da redis geoname
+#      popu = sti record[:qs_pop]
 
       # Build a set
       set = Pelias::LocationSet.new
       set.append_records "#{type}.gn_id", gn_id
       set.append_records "#{type}.woe_id", woe_id
+      #set.append_records "#{type}.popu", population
       set.close_records_for type
 
       # Update it
@@ -62,16 +69,22 @@ module Pelias
         entry['abbr'] = record[ABBR_FIELDS[type_sym]] if ABBR_FIELDS.key?(type_sym)
         entry['abbr'] = self.class.state_map.key(entry['name']) if type_sym == :admin1 && record[:qs_iso_cc] == 'US'
         entry['gn_id'] = gn_id
-        entry['woe_id'] = woe_id
+        #entry['woe_id'] = woe_id
+	#raf sostituisco, piu in basso, con le coordinate prese da geonames ADM
         entry['center_point'] = parse_point record[:st_centroid]
 
         # Use GN data if we have it
+#raf
         if gn_id && gn_raw = Pelias::REDIS.hget('geoname', gn_id)
           gn_data = JSON.parse(gn_raw)
           entry['name'] = gn_data['name']
           entry['alternate_names'] = gn_data['alternate_names'] || []
           entry['population'] = gn_data['population'].to_i
+          entry['gn-center_point'] = Array[gn_data['longitude'].to_f, gn_data['latitude'].to_f]
+          entry['center_point'] = Array[gn_data['longitude'].to_f, gn_data['latitude'].to_f]
         end
+
+
 
         # Copy down for the level
         entry['refs'] ||= {}
